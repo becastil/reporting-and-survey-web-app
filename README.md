@@ -103,6 +103,38 @@ SKIP_AUTH=true
 └── public/             # Static assets
 ```
 
+## 🔑 Clerk Authentication
+
+- Provider: The app is wrapped with `ClerkProvider` in `src/app/layout.tsx` via `src/components/app-clerk-provider.tsx`.
+- Env inputs:
+  - Server-only: `CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`.
+  - Client-only: `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` (same publishable key; safe for browser).
+- No legacy Clerk variables are used (e.g., no `CLERK_FRONTEND_API`).
+- Fail-fast: In production, startup fails with a clear error if keys are missing.
+
+## 🧭 Environment Handling
+
+- Centralized in `src/lib/env.ts` with Zod validation.
+- Server code uses `serverEnv()` to access `CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY`.
+- Client code imports `clientEnv` to access `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` only.
+- Guardrails:
+  - Server must not import `NEXT_PUBLIC_*` directly.
+  - Client must never access `CLERK_SECRET_KEY`.
+- Escape hatch: `SKIP_ENV_VALIDATION=true` can be set for local builds (non-production) to unblock development; never set this in production.
+
+## 🛡️ Middleware & Public Routes
+
+- Clerk middleware is enabled in `src/middleware.ts`.
+- Public routes are defined in `src/config/publicRoutes.ts` and include:
+  - `/`, `/favicon.ico`, `/_next/static/*`, `/_next/image*`, `/api/health`
+- All other routes are protected by default.
+- Demo bypass in middleware only applies in non-production (see Demo Mode below).
+
+## 🧪 Health Check
+
+- Endpoint: `GET /api/health` returns `{ status: 'ok' }`.
+- Purpose: Simple readiness check for Vercel deployments and monitors.
+
 ## 🚀 Deployment
 
 ### Vercel (Recommended)
@@ -120,6 +152,11 @@ SKIP_AUTH=true
    ```bash
    vercel --prod
    ```
+4. **Smoke test:**
+   - `GET https://<your-app>.vercel.app/api/health` → 200 `{ status: 'ok' }`.
+   - Visit `/` → 200 unauthenticated (public).
+   - Visit a protected route (e.g., `/survey`) → redirect/401 when signed out; renders when signed in.
+   - `GET https://<your-app>.vercel.app/api/whoami` → 401 when signed out; 200 with user info when signed in.
 
 ## 🔐 Production Setup
 
@@ -133,6 +170,7 @@ SKIP_AUTH=true
   - Visit a public route (e.g., `/`) and confirm it loads without auth.
   - Visit a protected route and confirm it redirects/401 when signed out and renders when signed in.
 - Public routes are centrally defined in `src/config/publicRoutes.ts`. All other routes are protected via Clerk middleware.
+ - Health check: `GET /api/health`.
 
 ## ✅ Vercel Deployment Checklist
 
@@ -140,6 +178,31 @@ SKIP_AUTH=true
 - Ensure demo flags (`DEMO_MODE`, `SKIP_AUTH`, `ENABLE_DEMO_MODE`) are NOT enabled in Production.
 - Redeploy with a clean build (`vercel --prod`).
 - Smoke test public and protected routes as above.
+ - Confirm logs show no “@clerk/backend: Missing publishableKey”.
+
+## 🧪 Test Plan (Clerk)
+
+### Local
+- Copy `.env.example` → `.env.local` and provide real Clerk values for:
+  - `CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`, `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`.
+- Run `npm run dev` and verify:
+  - Public pages load without auth; protected pages enforce auth (unless local Demo Mode is enabled).
+  - Client bundle does not contain secrets: `grep -R "CLERK_SECRET_KEY" .next/static` → no results.
+
+### Production (Vercel)
+- Set the three Clerk env vars in Production.
+- Ensure demo flags are disabled in Production.
+- Deploy, then verify:
+  - No “Missing publishableKey” in runtime logs.
+  - `/api/health` → 200.
+  - `/api/whoami` → 401 when signed out; 200 with user info when signed in.
+  - Public and protected routes behave as expected when signed out/in.
+
+## 🧪 Demo Mode (Local Only)
+
+- Optional flags for local demos: `DEMO_MODE=true`, `SKIP_AUTH=true`, `ENABLE_DEMO_MODE=true`.
+- Demo bypass is honored only in non-production.
+- Do not enable these in Vercel Production.
 
 ## 🧪 Test Plan
 
