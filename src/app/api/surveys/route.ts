@@ -8,14 +8,10 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
     const status = searchParams.get('status')
     
-    let query = db.select().from(surveys)
-    
-    if (status) {
-      // Add status filter if provided
-      query = query.where(eq(surveys.isPublished, status === 'active'))
-    }
-    
-    const allSurveys = await query
+    // Build query conditionally
+    const allSurveys = await (status 
+      ? db.select().from(surveys).where(eq(surveys.isPublished, status === 'active'))
+      : db.select().from(surveys))
     
     return NextResponse.json({
       success: true,
