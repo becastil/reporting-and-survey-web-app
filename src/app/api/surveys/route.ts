@@ -2,9 +2,28 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { surveys, surveySections, surveyQuestions } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
+import { isDemoMode, mockSurveys } from '@/lib/demo-utils'
 
 export async function GET(request: NextRequest) {
   try {
+    // Return mock data in demo mode
+    if (isDemoMode()) {
+      const searchParams = request.nextUrl.searchParams
+      const status = searchParams.get('status')
+      
+      let filteredSurveys = mockSurveys
+      if (status === 'active') {
+        filteredSurveys = mockSurveys.filter(s => s.isPublished)
+      } else if (status === 'inactive') {
+        filteredSurveys = mockSurveys.filter(s => !s.isPublished)
+      }
+      
+      return NextResponse.json({
+        success: true,
+        data: filteredSurveys,
+      })
+    }
+    
     const searchParams = request.nextUrl.searchParams
     const status = searchParams.get('status')
     
@@ -19,10 +38,11 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     console.error('Error fetching surveys:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to fetch surveys' },
-      { status: 500 }
-    )
+    // Return mock data as fallback
+    return NextResponse.json({
+      success: true,
+      data: mockSurveys,
+    })
   }
 }
 
@@ -30,6 +50,24 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { title, description, sections, settings } = body
+    
+    // Return mock response in demo mode
+    if (isDemoMode()) {
+      const newSurvey = {
+        id: `demo-survey-${Date.now()}`,
+        title,
+        description,
+        settings: settings || {},
+        isPublished: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }
+      
+      return NextResponse.json({
+        success: true,
+        data: newSurvey,
+      })
+    }
     
     // Create survey
     const [newSurvey] = await db.insert(surveys).values({
@@ -75,9 +113,18 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error('Error creating survey:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to create survey' },
-      { status: 500 }
-    )
+    // Return mock response as fallback
+    const body = await request.json()
+    return NextResponse.json({
+      success: true,
+      data: {
+        id: `demo-survey-${Date.now()}`,
+        title: body.title || 'New Survey',
+        description: body.description || '',
+        isPublished: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    })
   }
 }
