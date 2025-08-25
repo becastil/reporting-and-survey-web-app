@@ -1,276 +1,216 @@
 # Survey & Reporting Platform
 
-A modern, cloud-native survey and reporting platform with interactive dashboards, real-time analytics, and CSV-based reporting capabilities.
+A modern, production-ready survey and reporting platform built with Next.js 14, TypeScript, and Tailwind CSS.
 
-## Features
+[![CI](https://github.com/becastil/reporting-and-survey-web-app/actions/workflows/ci.yml/badge.svg)](https://github.com/becastil/reporting-and-survey-web-app/actions/workflows/ci.yml)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/becastil/reporting-and-survey-web-app)
 
-### 📊 Survey Module
-- **Dynamic Survey Builder**: Drag-and-drop interface with multiple question types (dropdown, multiple choice, text, scale, matrix)
-- **Real-time Response Collection**: Automatic aggregation and storage in the cloud
-- **Interactive Dashboards**: 20-40 customizable charts, tables, and benchmarks
-- **Advanced Analytics**: Filtering, comparison, drill-down capabilities
-- **Admin Portal**: Comprehensive survey management and response viewing
+## 🚀 Quick Start
 
-### 📈 Reporting Module
-- **CSV Template System**: Download templates, populate, and upload for processing
-- **Automatic Validation**: Data validation, normalization, and aggregation
-- **Interactive Visualizations**: Generate dashboards from uploaded data
-- **PDF Export**: Export dashboards and reports for sharing
-- **Flexible Reporting**: Support for various data sources and formats
-
-## Tech Stack
-
-- **Frontend**: Next.js 14 (App Router), TypeScript, Tailwind CSS
-- **UI Components**: shadcn/ui, Radix UI
-- **State Management**: Zustand, TanStack Query
-- **Charts**: Recharts, Tremor
-- **Animations**: Framer Motion
-- **Backend**: Node.js, Drizzle ORM
-- **Database**: PostgreSQL
-- **Authentication**: Clerk (demo mode)
-- **File Processing**: Papa Parse (CSV)
-
-## Quick Start
-
-### Prerequisites
-- Node.js 18+ (20.x recommended) and npm 10+
-- PostgreSQL database (optional for demo mode)
-- Git
-- WSL2 (for Windows users)
-
-### ⚠️ Important: WSL Setup (Windows Users)
-
-If using WSL, **ALWAYS** clone and develop in the Linux filesystem for optimal performance:
+Get the app running locally in under 5 minutes:
 
 ```bash
-# ✅ CORRECT - Use Linux filesystem
-cd ~/code
-git clone https://github.com/becastil/survey-web-app-version-2.git
-cd survey-web-app-version-2
+# Clone the repository
+git clone https://github.com/becastil/reporting-and-survey-web-app.git
+cd reporting-and-survey-web-app
 
-# ❌ AVOID - Windows filesystem causes permission errors
-# cd /mnt/c/Users/...
-```
-
-### Installation
-
-1. Clone the repository:
-```bash
-# Clone to Linux filesystem (WSL) or native macOS/Linux
-cd ~/code  # or your preferred directory
-git clone https://github.com/becastil/survey-web-app-version-2.git
-cd survey-web-app-version-2
-```
-
-2. Install dependencies:
-```bash
-# Clean install to avoid conflicts
-rm -rf node_modules package-lock.json
-npm install
-```
-
-3. Set up environment variables:
-```bash
+# Copy environment variables
 cp .env.example .env.local
-```
 
-Edit `.env.local` with your configuration:
+# Install dependencies
+npm install
 
-#### For Development with Authentication:
-```env
-# Get your keys from https://dashboard.clerk.com
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_actual_key
-CLERK_SECRET_KEY=sk_test_your_actual_secret
-
-# Database (optional for demo mode)
-DATABASE_URL="postgresql://username:password@localhost:5432/survey_platform"
-
-# Demo mode settings
-DEMO_MODE=true
-```
-
-#### For Quick Demo (No Auth Required):
-```env
-# Leave Clerk keys empty for demo mode
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=""
-CLERK_SECRET_KEY=""
-DEMO_MODE=true
-```
-
-4. Set up the database:
-```bash
-# Generate database migrations
-npm run db:generate
-
-# Run migrations
-npm run db:migrate
-
-# Seed with demo data
-npm run db:seed
-```
-
-5. Start the development server:
-```bash
+# Run development server
 npm run dev
 ```
 
-Visit [http://localhost:3000](http://localhost:3000) to see the application.
+Open [http://localhost:3000](http://localhost:3000) to see the application.
 
-## Troubleshooting
+### Demo Mode
 
-### Common Issues & Solutions
+To run the app without authentication (demo mode), set these in `.env.local`:
 
-#### WSL Permission Errors (EACCES)
-**Problem**: `npm install` fails with permission errors on Windows WSL.
-
-**Solution**: Always clone and develop in Linux filesystem:
-```bash
-# Move project to Linux filesystem
-cp -r /mnt/c/path/to/survey-web-app-version-2 ~/code/
-cd ~/code/survey-web-app-version-2
-npm install
-```
-
-#### Clerk Authentication Errors
-**Problem**: "Missing publishableKey" or "Invalid publishableKey" errors.
-
-**Solution**: 
-1. Get valid keys from [Clerk Dashboard](https://dashboard.clerk.com)
-2. Update `.env.local` with actual keys (not placeholders)
-3. Restart the development server
-
-#### CSS Module Errors
-**Problem**: "Selector is not pure" errors in CSS modules.
-
-**Solution**: Use class selectors instead of attribute selectors:
-```css
-/* ❌ Wrong */
-[data-testid="panel"] { }
-
-/* ✅ Correct */
-.panel { }
-```
-
-#### Port Already in Use
-**Problem**: Port 3000 is already in use.
-
-**Solution**: The app will automatically try port 3001, or specify a custom port:
-```bash
-npm run dev -- --port 3002
-```
-
-## Project Structure
-
-```
-survey-web-app-version-2/
-├── src/
-│   ├── app/                    # Next.js app router pages
-│   │   ├── api/                # API routes
-│   │   ├── survey/             # Survey module pages
-│   │   └── reporting/          # Reporting module pages
-│   ├── components/             # React components
-│   │   ├── ui/                 # Base UI components
-│   │   ├── survey/             # Survey-specific components
-│   │   └── reporting/          # Reporting-specific components
-│   ├── lib/                    # Utilities and configurations
-│   │   ├── db/                 # Database schema and config
-│   │   └── utils.ts            # Helper functions
-│   └── types/                  # TypeScript type definitions
-├── public/                     # Static assets
-└── drizzle/                    # Database migrations
-```
-
-## Development
-
-### Database Management
-```bash
-# View database in Drizzle Studio
-npm run db:studio
-
-# Generate new migrations after schema changes
-npm run db:generate
-
-# Apply migrations
-npm run db:migrate
-
-# Reset and reseed database
-npm run db:seed
-```
-
-### Type Checking
-```bash
-npm run type-check
-```
-
-### Linting
-```bash
-npm run lint
-```
-
-## Demo Credentials
-
-For demo mode:
-- **Admin**: admin@demo.com / demo123
-- **User**: user@demo.com / demo123
-
-## API Endpoints
-
-### Survey Endpoints
-- `GET /api/surveys` - List all surveys
-- `POST /api/surveys` - Create new survey
-- `GET /api/surveys/:id` - Get survey details
-- `POST /api/surveys/:id/responses` - Submit survey response
-- `GET /api/surveys/:id/analytics` - Get survey analytics
-
-### Reporting Endpoints
-- `POST /api/reports/upload` - Upload CSV file
-- `GET /api/reports` - List all reports
-- `GET /api/reports/:id` - Get report details
-- `GET /api/reports/:id/export` - Export report as PDF
-
-## Production Deployment
-
-### Environment Variables
 ```env
-NODE_ENV=production
-DATABASE_URL=your_production_database_url
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=production_clerk_key
-CLERK_SECRET_KEY=production_clerk_secret
-NEXT_PUBLIC_APP_URL=https://your-domain.com
+DEMO_MODE=true
+SKIP_AUTH=true
 ```
 
-### Build for Production
+## 📋 Prerequisites
+
+- Node.js 18.0.0 or higher
+- npm 10.0.0 or higher
+- PostgreSQL (optional, for full functionality)
+- Redis (optional, for caching)
+
+## 🛠️ Environment Setup
+
+1. **Copy the example environment file:**
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. **Configure required variables:**
+   - **Database**: Update `DATABASE_URL` with your PostgreSQL connection
+   - **Authentication**: Get Clerk keys from [clerk.dev](https://clerk.dev) or use demo mode
+   - **Application URL**: Update `NEXT_PUBLIC_APP_URL` for production
+
+3. **Optional services:**
+   - Redis for caching (set `REDIS_URL`)
+   - Feature flags (adjust `ENABLE_*` variables)
+
+## 📦 Available Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start development server on port 3000 |
+| `npm run build` | Build production application |
+| `npm start` | Start production server |
+| `npm run lint` | Run ESLint |
+| `npm run format` | Format code with Prettier |
+| `npm run format:check` | Check code formatting |
+| `npm run type-check` | Run TypeScript type checking |
+| `npm test` | Run unit tests |
+| `npm run test:watch` | Run tests in watch mode |
+| `npm run test:coverage` | Generate test coverage report |
+| `npm run test:e2e` | Run end-to-end tests |
+
+### Database Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run db:push` | Push schema to database |
+| `npm run db:generate` | Generate database migrations |
+| `npm run db:migrate` | Run database migrations |
+| `npm run db:seed` | Seed database with sample data |
+| `npm run db:studio` | Open Drizzle Studio |
+
+## 🏗️ Project Structure
+
+```
+├── src/
+│   ├── app/              # Next.js app router pages
+│   ├── components/       # React components
+│   │   ├── dashboard/    # Dashboard components
+│   │   ├── reporting/    # Reporting components
+│   │   ├── survey/       # Survey components
+│   │   └── ui/          # Shared UI components
+│   ├── lib/             # Utility libraries
+│   ├── config/          # Configuration files
+│   └── middleware.ts    # Next.js middleware
+├── docs/                # Documentation
+├── e2e/                 # End-to-end tests
+├── .github/            # GitHub Actions workflows
+└── public/             # Static assets
+```
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+
+1. **Click the Deploy button:**
+   
+   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/becastil/reporting-and-survey-web-app)
+
+2. **Configure environment variables in Vercel:**
+   - Add all variables from `.env.example`
+   - Set `NODE_ENV=production`
+   - Configure your database and authentication
+
+3. **Deploy:**
+   ```bash
+   vercel --prod
+   ```
+
+### Manual Deployment
+
+1. **Build the application:**
+   ```bash
+   npm run build
+   ```
+
+2. **Set production environment variables**
+
+3. **Start the server:**
+   ```bash
+   npm start
+   ```
+
+## 🧪 Testing
+
+### Unit Tests
 ```bash
-npm run build
-npm start
+npm test                 # Run once
+npm run test:watch      # Watch mode
+npm run test:coverage   # With coverage
 ```
 
-### Deployment Options
-- **Vercel**: Automatic deployment with GitHub integration
-- **Railway/Render**: Full-stack deployment with PostgreSQL
-- **Docker**: Containerized deployment (Dockerfile included)
+### End-to-End Tests
+```bash
+npm run test:e2e        # Headless
+npm run test:e2e:ui     # With UI
+npm run test:e2e:debug  # Debug mode
+```
 
-## Security Considerations
+## 🐛 Troubleshooting
 
-- Enable HTTPS in production
-- Configure CORS properly
-- Implement rate limiting
-- Use environment variables for sensitive data
-- Enable audit logging
-- Regular security updates
+### Common Issues
 
-## Contributing
+**Build fails with TypeScript errors:**
+- Run `npm run type-check` to identify issues
+- Temporarily skip with `SKIP_ENV_VALIDATION=true npm run build`
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+**Authentication not working:**
+- Verify Clerk keys are correct
+- Use `DEMO_MODE=true` for local development
+- Check `NEXT_PUBLIC_APP_URL` matches your domain
 
-## License
+**Database connection issues:**
+- Verify `DATABASE_URL` is correct
+- Ensure PostgreSQL is running
+- Check network/firewall settings
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+**Module not found errors:**
+- Clear node_modules: `rm -rf node_modules package-lock.json`
+- Reinstall: `npm install`
 
-## Support
+## 🔧 Development Workflow
 
-For issues and questions, please open a GitHub issue or contact support@example.com
+1. **Create a new branch:**
+   ```bash
+   git checkout -b feature/your-feature
+   ```
+
+2. **Make changes and test:**
+   ```bash
+   npm run dev       # Development server
+   npm test          # Run tests
+   npm run lint      # Check linting
+   ```
+
+3. **Commit with conventional commits:**
+   ```bash
+   git add .
+   git commit -m "feat: add new feature"
+   ```
+
+4. **Push and create PR:**
+   ```bash
+   git push origin feature/your-feature
+   ```
+
+## 📄 License
+
+MIT
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read our contributing guidelines before submitting PRs.
+
+## 📞 Support
+
+- [GitHub Issues](https://github.com/becastil/reporting-and-survey-web-app/issues)
+- [Documentation](./docs)
+
+---
+
+Built with ❤️ using Next.js, TypeScript, and Tailwind CSS
