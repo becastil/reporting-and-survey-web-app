@@ -23,15 +23,15 @@
   },
   
   "functions": {
-    "app/api/calculations/what-if/route.ts": {
+    "api/calculations/what-if": {
       "maxDuration": 10,
       "memory": 1024
     },
-    "app/api/reports/upload/route.ts": {
+    "api/reports/upload": {
       "maxDuration": 30,
       "memory": 3008
     },
-    "app/api/reports/export/route.ts": {
+    "api/reports/export": {
       "maxDuration": 30,
       "memory": 1024
     }
@@ -89,14 +89,5 @@
     }
   ],
   
-  "crons": [
-    {
-      "path": "/api/cron/refresh-cache",
-      "schedule": "0 */6 * * *"
-    },
-    {
-      "path": "/api/cron/cleanup-uploads",
-      "schedule": "0 2 * * *"
-    }
-  ]
+  "crons": []
 }

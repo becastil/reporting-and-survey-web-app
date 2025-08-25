@@ -121,6 +121,40 @@ SKIP_AUTH=true
    vercel --prod
    ```
 
+## 🔐 Production Setup
+
+- Required environment variables (Production):
+  - `CLERK_PUBLISHABLE_KEY`
+  - `CLERK_SECRET_KEY`
+  - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` (same publishable key, used by client)
+- Where to set them: Vercel → Project → Settings → Environment Variables → Production.
+- Verification:
+  - Deploy and check logs for absence of “@clerk/backend: Missing publishableKey”.
+  - Visit a public route (e.g., `/`) and confirm it loads without auth.
+  - Visit a protected route and confirm it redirects/401 when signed out and renders when signed in.
+- Public routes are centrally defined in `src/config/publicRoutes.ts`. All other routes are protected via Clerk middleware.
+
+## ✅ Vercel Deployment Checklist
+
+- Set `CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`, and `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` in Production.
+- Ensure demo flags (`DEMO_MODE`, `SKIP_AUTH`, `ENABLE_DEMO_MODE`) are NOT enabled in Production.
+- Redeploy with a clean build (`vercel --prod`).
+- Smoke test public and protected routes as above.
+
+## 🧪 Test Plan
+
+### Local
+- Copy `.env.example` → `.env.local` and provide real Clerk values for:
+  - `CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`, and `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`.
+- Run `npm run dev` and verify:
+  - Server components can access user state (when protected) via middleware.
+  - Client components get user state via `ClerkProvider`.
+  - No secret variables leak in client: `grep -R "CLERK_SECRET_KEY" .next/static` returns no results.
+
+### Production (Vercel)
+- Confirm middleware protects non-public routes and public routes load unauthenticated.
+- Confirm no “Missing publishableKey” logs during runtime.
+
 ### Manual Deployment
 
 1. **Build the application:**
