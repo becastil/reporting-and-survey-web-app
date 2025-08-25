@@ -1,0 +1,391 @@
+/**
+ * GuidedDemoMode Component Styles
+ * Interactive walkthrough with spotlight effect
+ */
+
+.container {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  pointer-events: auto;
+}
+
+.spotlight {
+  position: absolute;
+  background: transparent;
+  box-shadow: 
+    0 0 0 9999px rgba(0, 0, 0, 0.75),
+    0 0 20px rgba(var(--primary-rgb), 0.3);
+  pointer-events: none;
+  transition: all 0.3s ease-out;
+}
+
+.pulseRing {
+  position: absolute;
+  inset: -20px;
+  border: 2px solid var(--primary);
+  border-radius: inherit;
+  animation: pulse 2s infinite;
+  opacity: 0.5;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.2;
+  }
+}
+
+.tooltip {
+  position: fixed;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  max-width: 400px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
+  transform-origin: center;
+}
+
+.tooltip.top {
+  transform: translate(-50%, -100%) translateY(-20px);
+}
+
+.tooltip.bottom {
+  transform: translate(-50%, 20px);
+}
+
+.tooltip.left {
+  transform: translate(-100%, -50%) translateX(-20px);
+}
+
+.tooltip.right {
+  transform: translate(20px, -50%);
+}
+
+.skipButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--muted-foreground);
+}
+
+.skipButton:hover {
+  background: var(--destructive);
+  color: var(--destructive-foreground);
+  transform: scale(1.1);
+}
+
+.skipButton svg {
+  width: 16px;
+  height: 16px;
+}
+
+.stepNumber {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted-foreground);
+  margin-bottom: 8px;
+}
+
+.stepTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0 0 12px 0;
+  line-height: 1.3;
+}
+
+.stepDescription {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+}
+
+.stepAction {
+  padding: 8px 12px;
+  background: var(--accent);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  color: var(--accent-foreground);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.navButton {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.navButton:hover:not(:disabled) {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+}
+
+.navButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.navButton svg {
+  width: 18px;
+  height: 18px;
+}
+
+.progressDots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--muted);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.dot:hover {
+  transform: scale(1.2);
+  background: var(--accent);
+}
+
+.activeDot {
+  width: 24px;
+  border-radius: 4px;
+  background: var(--primary);
+}
+
+.autoPlayControls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.autoPlayButton,
+.restartButton {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--foreground);
+}
+
+.autoPlayButton:hover,
+.restartButton:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+  transform: scale(1.05);
+}
+
+.autoPlayButton svg,
+.restartButton svg {
+  width: 14px;
+  height: 14px;
+}
+
+.progressBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--muted);
+  pointer-events: none;
+  z-index: 10000;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--primary));
+  box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tooltip {
+    max-width: 90vw;
+    margin: 0 5vw;
+    padding: 16px;
+  }
+  
+  .stepTitle {
+    font-size: 1.125rem;
+  }
+  
+  .stepDescription {
+    font-size: 0.813rem;
+  }
+  
+  .controls {
+    gap: 12px;
+  }
+  
+  .navButton {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .progressDots {
+    gap: 6px;
+  }
+  
+  .dot {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .activeDot {
+    width: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tooltip {
+    position: fixed !important;
+    bottom: 20px !important;
+    left: 10px !important;
+    right: 10px !important;
+    transform: none !important;
+    max-width: none;
+    margin: 0;
+  }
+  
+  .tooltip.top,
+  .tooltip.bottom,
+  .tooltip.left,
+  .tooltip.right {
+    transform: none !important;
+  }
+  
+  .stepTitle {
+    font-size: 1rem;
+  }
+  
+  .autoPlayControls {
+    display: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .backdrop {
+    background: rgba(0, 0, 0, 0.9);
+  }
+  
+  .tooltip {
+    border-width: 2px;
+  }
+  
+  .pulseRing {
+    border-width: 3px;
+  }
+  
+  .navButton {
+    border: 2px solid var(--primary-foreground);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .spotlight {
+    transition: none;
+  }
+  
+  .pulseRing {
+    animation: none;
+    opacity: 0.3;
+  }
+  
+  .navButton,
+  .skipButton,
+  .dot,
+  .autoPlayButton,
+  .restartButton {
+    transition: none;
+  }
+  
+  @keyframes pulse {
+    from, to {
+      transform: none;
+      opacity: 0.3;
+    }
+  }
+}
+
+/* Dark Mode */
+.dark .backdrop {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.dark .tooltip {
+  background: var(--card);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.dark .pulseRing {
+  border-color: var(--primary);
+  opacity: 0.3;
+}

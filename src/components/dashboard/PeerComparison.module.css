@@ -1,0 +1,468 @@
+/**
+ * PeerComparison Component Styles
+ * Benchmarking card with similar organizations
+ */
+
+.container {
+  --card-bg: var(--card);
+  --card-border: var(--border);
+  --badge-gold: #fbbf24;
+  --badge-green: var(--success);
+  --badge-blue: var(--primary);
+  --badge-orange: var(--warning);
+  
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: box-shadow 0.2s ease;
+}
+
+.container:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  color: var(--primary);
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease;
+}
+
+.badge.gold {
+  background: rgba(251, 191, 36, 0.1);
+  color: var(--badge-gold);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.badge.green {
+  background: rgba(var(--success-rgb), 0.1);
+  color: var(--badge-green);
+  border: 1px solid rgba(var(--success-rgb), 0.3);
+}
+
+.badge.blue {
+  background: rgba(var(--primary-rgb), 0.1);
+  color: var(--badge-blue);
+  border: 1px solid rgba(var(--primary-rgb), 0.3);
+}
+
+.badge.orange {
+  background: rgba(var(--warning-rgb), 0.1);
+  color: var(--badge-orange);
+  border: 1px solid rgba(var(--warning-rgb), 0.3);
+}
+
+.badgeIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.dimensions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.dimensionLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  margin-right: 8px;
+}
+
+.dimension {
+  padding: 4px 10px;
+  background: var(--muted);
+  color: var(--muted-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dimension:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.dimension.active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+
+.cohortStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding: 16px;
+  background: var(--muted);
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  margin-bottom: 4px;
+}
+
+.statValue {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+
+.peerList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.peerCard {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 16px;
+  align-items: center;
+  padding: 12px;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.peerCard:hover,
+.peerCard.hovered {
+  background: var(--accent);
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.peerCard:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.peerRank {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-radius: 50%;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.peerInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.peerName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.peerDetails {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+.peerMetrics {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.metricValue {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+
+.metricLabel {
+  font-size: 0.625rem;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.sparklineContainer {
+  width: 60px;
+  height: 24px;
+}
+
+.sparkline {
+  width: 100%;
+  height: 100%;
+}
+
+.similarityBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+.similarityScore {
+  padding: 4px 8px;
+  background: var(--accent);
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-foreground);
+}
+
+.similarityTooltip {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.infoIcon {
+  width: 14px;
+  height: 14px;
+  color: var(--muted-foreground);
+  cursor: help;
+}
+
+.tooltip {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 8px;
+  padding: 12px;
+  background: var(--popover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  z-index: 10;
+  animation: fadeIn 0.2s ease;
+}
+
+.tooltip strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.75rem;
+  color: var(--foreground);
+}
+
+.tooltip ul {
+  margin: 0;
+  padding: 0 0 0 16px;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+.tooltip li {
+  margin: 2px 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.expandButton,
+.applyFilterButton {
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.expandButton {
+  background: var(--muted);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
+
+.expandButton:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.applyFilterButton {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  margin-left: auto;
+}
+
+.applyFilterButton:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.buttonIcon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .cohortStats {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .peerCard {
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+  }
+  
+  .peerMetrics,
+  .similarityBadge {
+    grid-column: span 2;
+    justify-content: space-between;
+  }
+  
+  .sparklineContainer {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1rem;
+  }
+  
+  .dimensions {
+    gap: 4px;
+  }
+  
+  .dimension {
+    padding: 2px 6px;
+    font-size: 0.625rem;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .expandButton,
+  .applyFilterButton {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .container {
+    border-width: 2px;
+  }
+  
+  .peerCard {
+    border-width: 2px;
+  }
+  
+  .badge {
+    border-width: 2px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .container,
+  .dimension,
+  .peerCard,
+  .expandButton,
+  .applyFilterButton {
+    transition: none;
+  }
+  
+  @keyframes fadeIn {
+    from, to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Dark Mode */
+.dark .tooltip {
+  background: var(--card);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}

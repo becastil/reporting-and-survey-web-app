@@ -1,0 +1,360 @@
+/**
+ * ReportingGrid Component Styles
+ * Virtual scrolling data grid with expandable rows
+ */
+
+.gridContainer {
+  --grid-border-color: var(--border);
+  --grid-header-bg: var(--muted);
+  --grid-row-hover: var(--accent);
+  --grid-positive-color: var(--success);
+  --grid-negative-color: var(--destructive);
+  --grid-neutral-color: var(--muted-foreground);
+  
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--grid-border-color);
+  border-radius: var(--radius);
+  overflow: hidden;
+  font-family: var(--font-mono);
+}
+
+.performanceBadge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  font-weight: 500;
+  z-index: 10;
+  animation: slideIn 0.3s ease-out;
+}
+
+.viewToggle {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  border-bottom: 1px solid var(--grid-border-color);
+  background: var(--background);
+}
+
+.toggleButton {
+  padding: 6px 12px;
+  background: var(--muted);
+  color: var(--muted-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggleButton:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.toggleButton.active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+
+.gridHeader {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1.5fr 1fr 1.5fr;
+  background: var(--grid-header-bg);
+  border-bottom: 2px solid var(--grid-border-color);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.headerCell {
+  padding: 12px 16px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: var(--foreground);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s ease;
+}
+
+.headerCell:hover {
+  background: var(--accent);
+}
+
+.sortIcon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+.headerCell:hover .sortIcon {
+  opacity: 1;
+}
+
+.gridBody {
+  position: relative;
+  background: var(--background);
+}
+
+.gridRow {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1.5fr 1fr 1.5fr;
+  border-bottom: 1px solid var(--grid-border-color);
+  transition: background 0.15s ease;
+  cursor: pointer;
+  will-change: transform;
+}
+
+.gridRow:hover {
+  background: var(--grid-row-hover);
+}
+
+.gridRow:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+
+.gridRow.level1 {
+  background: rgba(var(--muted-rgb), 0.3);
+}
+
+.gridRow.level2 {
+  background: rgba(var(--muted-rgb), 0.5);
+}
+
+.cell {
+  padding: 12px 16px;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.monthColumn {
+  font-weight: 500;
+}
+
+.numberColumn {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.percentColumn {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  justify-content: flex-end;
+  font-weight: 600;
+}
+
+.percentColumn.positive {
+  color: var(--grid-positive-color);
+}
+
+.percentColumn.negative {
+  color: var(--grid-negative-color);
+}
+
+.varianceColumn {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.varianceValue {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.varianceColumn.positive {
+  color: var(--grid-positive-color);
+}
+
+.varianceColumn.negative {
+  color: var(--grid-negative-color);
+}
+
+.expandButton {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted-foreground);
+  transition: color 0.2s ease;
+}
+
+.expandButton:hover {
+  color: var(--foreground);
+}
+
+.expandButton svg {
+  width: 14px;
+  height: 14px;
+}
+
+.trendUp {
+  color: var(--grid-positive-color);
+  width: 16px;
+  height: 16px;
+}
+
+.trendDown {
+  color: var(--grid-negative-color);
+  width: 16px;
+  height: 16px;
+}
+
+.trendNeutral {
+  color: var(--grid-neutral-color);
+  width: 16px;
+  height: 16px;
+}
+
+.gridFooter {
+  padding: 12px 16px;
+  background: var(--muted);
+  border-top: 1px solid var(--grid-border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summary {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+
+.advancedInfo {
+  margin-left: 8px;
+  opacity: 0.8;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .gridHeader,
+  .gridRow {
+    grid-template-columns: 1.5fr 1fr 1fr 0.8fr 1fr;
+  }
+  
+  .headerCell,
+  .cell {
+    padding: 8px 12px;
+    font-size: 0.75rem;
+  }
+  
+  .toggleButton {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+  
+  .performanceBadge {
+    font-size: 0.625rem;
+    padding: 2px 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gridHeader,
+  .gridRow {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+  
+  .percentColumn,
+  .varianceColumn {
+    display: none;
+  }
+  
+  .viewToggle {
+    padding: 8px;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .gridContainer {
+    border-width: 2px;
+  }
+  
+  .gridHeader {
+    border-bottom-width: 3px;
+  }
+  
+  .gridRow {
+    border-bottom-width: 2px;
+  }
+  
+  .gridRow:focus-visible {
+    outline-width: 3px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .gridRow,
+  .toggleButton,
+  .expandButton,
+  .sortIcon,
+  .headerCell {
+    transition: none;
+  }
+  
+  @keyframes slideIn {
+    from, to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+}
+
+/* Print Styles */
+@media print {
+  .viewToggle,
+  .performanceBadge {
+    display: none;
+  }
+  
+  .gridBody {
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  .gridRow {
+    position: static !important;
+    page-break-inside: avoid;
+  }
+}
