@@ -23,17 +23,9 @@
   },
   
   "functions": {
-    "api/calculations/what-if": {
-      "maxDuration": 10,
-      "memory": 1024
-    },
     "api/reports/upload": {
       "maxDuration": 30,
       "memory": 3008
-    },
-    "api/reports/export": {
-      "maxDuration": 30,
-      "memory": 1024
     }
   },
   
