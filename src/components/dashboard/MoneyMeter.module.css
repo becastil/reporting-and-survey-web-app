@@ -1,0 +1,278 @@
+/**
+ * Money Meter Component Styles
+ * Design System Aligned - Assured Partners Brand
+ */
+
+.money-meter {
+  --primary-color: #003d7a;
+  --secondary-color: #0066cc;
+  --success-color: #00a86b;
+  --error-color: #dc2626;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --bg-white: #ffffff;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --animation-duration: 3000ms;
+  --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  position: relative;
+  width: 100%;
+  padding: 2rem;
+  background: var(--bg-white);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  transition: box-shadow 0.2s ease;
+}
+
+.money-meter:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.money-meter__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+/* Value Container - Interactive Button */
+.money-meter__value-container {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.money-meter__value-container:disabled {
+  cursor: default;
+}
+
+.money-meter__value-container:focus-visible {
+  outline: 3px solid var(--secondary-color);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+/* Main Value Display */
+.money-meter__value {
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  font-size: 72px;
+  font-weight: 700;
+  color: var(--primary-color);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  position: relative;
+
+  /* Performance optimization */
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
+}
+
+.money-meter__value[data-animating='true'] {
+  animation: pulse 0.5s ease-in-out;
+}
+
+/* Trend Indicator */
+.money-meter__trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.money-meter__trend[data-direction='up'] {
+  background: rgba(0, 168, 107, 0.1);
+  color: var(--success-color);
+}
+
+.money-meter__trend[data-direction='down'] {
+  background: rgba(220, 38, 38, 0.1);
+  color: var(--error-color);
+}
+
+.money-meter__trend[data-direction='neutral'] {
+  background: rgba(107, 114, 128, 0.1);
+  color: var(--text-secondary);
+}
+
+.money-meter__trend-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.money-meter__trend-text {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Labels */
+.money-meter__labels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.money-meter__title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.money-meter__subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Performance Badge */
+.money-meter__performance-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.25rem 0.5rem;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  box-shadow: var(--shadow-sm);
+  animation: slideIn 0.3s ease;
+}
+
+.money-meter__performance-value {
+  display: inline-block;
+}
+
+/* Click Hint */
+.money-meter__hint {
+  font-size: 12px;
+  color: var(--text-secondary);
+  opacity: 0;
+  animation: fadeIn 0.5s ease 3.5s forwards;
+  pointer-events: none;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 767px) {
+  .money-meter {
+    padding: 1.5rem;
+  }
+
+  .money-meter__value {
+    font-size: clamp(48px, 8vw, 56px);
+  }
+
+  .money-meter__title {
+    font-size: 16px;
+  }
+
+  .money-meter__performance-badge {
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .money-meter__value {
+    font-size: 64px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .money-meter {
+    padding: 2.5rem;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .money-meter {
+    border: 2px solid currentColor;
+  }
+
+  .money-meter__value-container:focus-visible {
+    outline-width: 3px;
+  }
+
+  .money-meter__performance-badge {
+    border: 1px solid currentColor;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .money-meter__value,
+  .money-meter__trend,
+  .money-meter__performance-badge,
+  .money-meter__hint {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Animations */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.8;
+  }
+}
+
+/* Screen Reader Only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
