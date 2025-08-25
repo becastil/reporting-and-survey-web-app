@@ -1,46 +1,41 @@
 'use client'
 
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode } from 'react'
 import dynamic from 'next/dynamic'
 
 interface ConditionalClerkProviderProps {
   children: ReactNode
 }
 
-// Dynamically import ClerkProvider only when needed
-const ClerkProviderDynamic = dynamic(
+// Calculate at module level - env vars are available at build time
+// This is safe because these env vars don't change at runtime
+const shouldUseDemoMode = 
+  process.env.NEXT_PUBLIC_DEMO_MODE === 'true' || 
+  process.env.NEXT_PUBLIC_SKIP_AUTH === 'true' ||
+  process.env.NEXT_PUBLIC_ENABLE_DEMO_MODE === 'true' ||
+  !process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ||
+  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY === 'pk_test_demo' ||
+  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY === 'pk_test_dummy'
+
+// Only load ClerkProvider if not in demo mode
+// This prevents loading unnecessary chunks in demo mode
+const ClerkProviderDynamic = shouldUseDemoMode ? null : dynamic(
   () => import('@clerk/nextjs').then((mod) => ({ 
     default: mod.ClerkProvider 
   })),
   { 
     ssr: false,
-    loading: () => null
+    loading: () => null // No loading state to prevent flashes
   }
 )
 
 export function ConditionalClerkProvider({ children }: ConditionalClerkProviderProps) {
-  const [isDemoMode, setIsDemoMode] = useState(true) // Default to demo mode to prevent errors
-  const [isClient, setIsClient] = useState(false)
-
-  useEffect(() => {
-    // Check demo mode on client side only
-    const checkDemoMode = 
-      process.env.NEXT_PUBLIC_DEMO_MODE === 'true' || 
-      process.env.NEXT_PUBLIC_SKIP_AUTH === 'true' ||
-      process.env.NEXT_PUBLIC_ENABLE_DEMO_MODE === 'true' ||
-      !process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ||
-      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY === 'pk_test_demo' ||
-      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY === 'pk_test_dummy'
-    
-    setIsDemoMode(checkDemoMode)
-    setIsClient(true)
-  }, [])
-
-  // During SSR or in demo mode, render children directly
-  if (!isClient || isDemoMode) {
+  // If in demo mode or ClerkProvider not needed, render children directly
+  // This provides consistent behavior between server and client
+  if (!ClerkProviderDynamic) {
     return <>{children}</>
   }
-
-  // Only use ClerkProvider on client when not in demo mode
+  
+  // Only render ClerkProvider when properly configured
   return <ClerkProviderDynamic>{children}</ClerkProviderDynamic>
 }
