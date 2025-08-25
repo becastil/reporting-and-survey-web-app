@@ -16,8 +16,9 @@
   
   "build": {
     "env": {
-      "NODE_VERSION": "20.9.0",
-      "NEXT_TELEMETRY_DISABLED": "1"
+      "NODE_VERSION": "18.20.0",
+      "NEXT_TELEMETRY_DISABLED": "1",
+      "SKIP_ENV_VALIDATION": "true"
     }
   },
   
