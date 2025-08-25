@@ -108,7 +108,7 @@ test.describe('Dashboard Integration Tests', () => {
     const initialValue = await dashboardPage.getMoneyMeterValue();
     
     // Adjust What-If slider
-    const slider = page.locator('[data-testid="employee-count-slider"]');
+    const slider = page.locator('[data-testid="what-if-panel"] input[type="range"]');
     await slider.fill('5'); // +5% adjustment
     
     // Wait for recalculation
@@ -117,5 +117,64 @@ test.describe('Dashboard Integration Tests', () => {
     // Verify Money Meter updated
     const newValue = await dashboardPage.getMoneyMeterValue();
     expect(newValue).not.toBe(initialValue);
+  });
+
+  test('should show Reporting Grid with virtual scrolling', async ({ page }) => {
+    const dashboardPage = new DashboardPage(page);
+    await dashboardPage.goto();
+    
+    // Verify grid is present
+    const grid = page.locator('[data-testid="reporting-grid"]');
+    await expect(grid).toBeVisible();
+    
+    // Check virtual scrolling container
+    const scrollContainer = grid.locator('.gridBody');
+    await expect(scrollContainer).toBeVisible();
+    
+    // Verify rows are rendered
+    const rows = grid.locator('[role="row"]');
+    await expect(rows.first()).toBeVisible();
+  });
+
+  test('should expand/collapse rows in Reporting Grid', async ({ page }) => {
+    const dashboardPage = new DashboardPage(page);
+    await dashboardPage.goto();
+    
+    const grid = page.locator('[data-testid="reporting-grid"]');
+    const expandButton = grid.locator('[aria-label="Expand row"]').first();
+    
+    // Expand row
+    await expandButton.click();
+    await expect(expandButton).toHaveAttribute('aria-label', 'Collapse row');
+    
+    // Check line items are visible
+    const lineItems = grid.locator('text=/Line Item/');
+    await expect(lineItems.first()).toBeVisible();
+    
+    // Collapse row
+    await expandButton.click();
+    await expect(expandButton).toHaveAttribute('aria-label', 'Expand row');
+  });
+
+  test('should apply What-If scenario', async ({ page }) => {
+    const dashboardPage = new DashboardPage(page);
+    await dashboardPage.goto();
+    
+    const whatIfPanel = page.locator('[data-testid="what-if-panel"]');
+    const slider = whatIfPanel.locator('input[type="range"]');
+    const applyButton = whatIfPanel.locator('button:has-text("Apply Scenario")');
+    
+    // Adjust slider
+    await slider.fill('3');
+    
+    // Apply scenario
+    await applyButton.click();
+    
+    // Verify slider resets
+    await expect(slider).toHaveValue('0');
+    
+    // Verify values updated
+    const adjustedColumn = whatIfPanel.locator('.adjustedColumn');
+    await expect(adjustedColumn).toContainText('1,030'); // 3% increase from 1000
   });
 });
