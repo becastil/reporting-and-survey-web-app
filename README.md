@@ -33,33 +33,68 @@ A modern, cloud-native survey and reporting platform with interactive dashboards
 ## Quick Start
 
 ### Prerequisites
-- Node.js 18+ and npm
-- PostgreSQL database
+- Node.js 18+ (20.x recommended) and npm 10+
+- PostgreSQL database (optional for demo mode)
 - Git
+- WSL2 (for Windows users)
+
+### ⚠️ Important: WSL Setup (Windows Users)
+
+If using WSL, **ALWAYS** clone and develop in the Linux filesystem for optimal performance:
+
+```bash
+# ✅ CORRECT - Use Linux filesystem
+cd ~/code
+git clone https://github.com/becastil/survey-web-app-version-2.git
+cd survey-web-app-version-2
+
+# ❌ AVOID - Windows filesystem causes permission errors
+# cd /mnt/c/Users/...
+```
 
 ### Installation
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd survey-reporting-platform
+# Clone to Linux filesystem (WSL) or native macOS/Linux
+cd ~/code  # or your preferred directory
+git clone https://github.com/becastil/survey-web-app-version-2.git
+cd survey-web-app-version-2
 ```
 
 2. Install dependencies:
 ```bash
+# Clean install to avoid conflicts
+rm -rf node_modules package-lock.json
 npm install
 ```
 
 3. Set up environment variables:
 ```bash
-cp .env.local.example .env.local
+cp .env.example .env.local
 ```
 
 Edit `.env.local` with your configuration:
+
+#### For Development with Authentication:
 ```env
+# Get your keys from https://dashboard.clerk.com
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_actual_key
+CLERK_SECRET_KEY=sk_test_your_actual_secret
+
+# Database (optional for demo mode)
 DATABASE_URL="postgresql://username:password@localhost:5432/survey_platform"
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_key
-CLERK_SECRET_KEY=your_clerk_secret
+
+# Demo mode settings
+DEMO_MODE=true
+```
+
+#### For Quick Demo (No Auth Required):
+```env
+# Leave Clerk keys empty for demo mode
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=""
+CLERK_SECRET_KEY=""
+DEMO_MODE=true
 ```
 
 4. Set up the database:
@@ -81,10 +116,53 @@ npm run dev
 
 Visit [http://localhost:3000](http://localhost:3000) to see the application.
 
+## Troubleshooting
+
+### Common Issues & Solutions
+
+#### WSL Permission Errors (EACCES)
+**Problem**: `npm install` fails with permission errors on Windows WSL.
+
+**Solution**: Always clone and develop in Linux filesystem:
+```bash
+# Move project to Linux filesystem
+cp -r /mnt/c/path/to/survey-web-app-version-2 ~/code/
+cd ~/code/survey-web-app-version-2
+npm install
+```
+
+#### Clerk Authentication Errors
+**Problem**: "Missing publishableKey" or "Invalid publishableKey" errors.
+
+**Solution**: 
+1. Get valid keys from [Clerk Dashboard](https://dashboard.clerk.com)
+2. Update `.env.local` with actual keys (not placeholders)
+3. Restart the development server
+
+#### CSS Module Errors
+**Problem**: "Selector is not pure" errors in CSS modules.
+
+**Solution**: Use class selectors instead of attribute selectors:
+```css
+/* ❌ Wrong */
+[data-testid="panel"] { }
+
+/* ✅ Correct */
+.panel { }
+```
+
+#### Port Already in Use
+**Problem**: Port 3000 is already in use.
+
+**Solution**: The app will automatically try port 3001, or specify a custom port:
+```bash
+npm run dev -- --port 3002
+```
+
 ## Project Structure
 
 ```
-survey-reporting-platform/
+survey-web-app-version-2/
 ├── src/
 │   ├── app/                    # Next.js app router pages
 │   │   ├── api/                # API routes
