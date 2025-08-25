@@ -45,6 +45,7 @@ SKIP_AUTH=true
 ## 🛠️ Environment Setup
 
 1. **Copy the example environment file:**
+
    ```bash
    cp .env.example .env.local
    ```
@@ -60,29 +61,29 @@ SKIP_AUTH=true
 
 ## 📦 Available Scripts
 
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start development server on port 3000 |
-| `npm run build` | Build production application |
-| `npm start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm run format` | Format code with Prettier |
-| `npm run format:check` | Check code formatting |
-| `npm run type-check` | Run TypeScript type checking |
-| `npm test` | Run unit tests |
-| `npm run test:watch` | Run tests in watch mode |
-| `npm run test:coverage` | Generate test coverage report |
-| `npm run test:e2e` | Run end-to-end tests |
+| Script                  | Description                           |
+| ----------------------- | ------------------------------------- |
+| `npm run dev`           | Start development server on port 3000 |
+| `npm run build`         | Build production application          |
+| `npm start`             | Start production server               |
+| `npm run lint`          | Run ESLint                            |
+| `npm run format`        | Format code with Prettier             |
+| `npm run format:check`  | Check code formatting                 |
+| `npm run type-check`    | Run TypeScript type checking          |
+| `npm test`              | Run unit tests                        |
+| `npm run test:watch`    | Run tests in watch mode               |
+| `npm run test:coverage` | Generate test coverage report         |
+| `npm run test:e2e`      | Run end-to-end tests                  |
 
 ### Database Scripts
 
-| Script | Description |
-|--------|-------------|
-| `npm run db:push` | Push schema to database |
-| `npm run db:generate` | Generate database migrations |
-| `npm run db:migrate` | Run database migrations |
-| `npm run db:seed` | Seed database with sample data |
-| `npm run db:studio` | Open Drizzle Studio |
+| Script                | Description                    |
+| --------------------- | ------------------------------ |
+| `npm run db:push`     | Push schema to database        |
+| `npm run db:generate` | Generate database migrations   |
+| `npm run db:migrate`  | Run database migrations        |
+| `npm run db:seed`     | Seed database with sample data |
+| `npm run db:studio`   | Open Drizzle Studio            |
 
 ## 🏗️ Project Structure
 
@@ -108,7 +109,7 @@ SKIP_AUTH=true
 ### Vercel (Recommended)
 
 1. **Click the Deploy button:**
-   
+
    [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/becastil/reporting-and-survey-web-app)
 
 2. **Configure environment variables in Vercel:**
@@ -124,6 +125,7 @@ SKIP_AUTH=true
 ### Manual Deployment
 
 1. **Build the application:**
+
    ```bash
    npm run build
    ```
@@ -135,9 +137,43 @@ SKIP_AUTH=true
    npm start
    ```
 
+## Production Setup
+
+### Required Environment Variables
+
+Configure these in **Vercel → Project → Settings → Environment Variables → Production**:
+
+- `CLERK_PUBLISHABLE_KEY`
+- `CLERK_SECRET_KEY`
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` (same publishable key for the client)
+
+### Verify Environment
+
+After deployment, check Vercel runtime logs. A request to `/` should return **200** without any `@clerk/backend: Missing publishableKey` errors.
+
+### Middleware & Public Routes
+
+The middleware uses Clerk to protect routes. The following paths remain public:
+
+- `/`
+- `/sign-in*`
+- `/sign-up*`
+- `/api/public*`
+
+All other routes require authentication.
+
+## Vercel Deployment Checklist
+
+1. In Vercel Project settings, add the required environment variables above.
+2. Redeploy the project to apply the new environment settings.
+3. Verify runtime logs show `GET /` with status **200** and no missing publishable key errors.
+4. Smoke test public and protected routes.
+5. Ensure no secrets appear in the client-side bundle.
+
 ## 🧪 Testing
 
 ### Unit Tests
+
 ```bash
 npm test                 # Run once
 npm run test:watch      # Watch mode
@@ -145,6 +181,7 @@ npm run test:coverage   # With coverage
 ```
 
 ### End-to-End Tests
+
 ```bash
 npm run test:e2e        # Headless
 npm run test:e2e:ui     # With UI
@@ -156,31 +193,37 @@ npm run test:e2e:debug  # Debug mode
 ### Common Issues
 
 **Build fails with TypeScript errors:**
+
 - Run `npm run type-check` to identify issues
 - Temporarily skip with `SKIP_ENV_VALIDATION=true npm run build`
 
 **Authentication not working:**
+
 - Verify Clerk keys are correct
 - Use `DEMO_MODE=true` for local development
 - Check `NEXT_PUBLIC_APP_URL` matches your domain
 
 **Database connection issues:**
+
 - Verify `DATABASE_URL` is correct
 - Ensure PostgreSQL is running
 - Check network/firewall settings
 
 **Module not found errors:**
+
 - Clear node_modules: `rm -rf node_modules package-lock.json`
 - Reinstall: `npm install`
 
 ## 🔧 Development Workflow
 
 1. **Create a new branch:**
+
    ```bash
    git checkout -b feature/your-feature
    ```
 
 2. **Make changes and test:**
+
    ```bash
    npm run dev       # Development server
    npm test          # Run tests
@@ -188,6 +231,7 @@ npm run test:e2e:debug  # Debug mode
    ```
 
 3. **Commit with conventional commits:**
+
    ```bash
    git add .
    git commit -m "feat: add new feature"

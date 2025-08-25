@@ -6,6 +6,9 @@ process.env.NEXT_PUBLIC_APP_URL = 'http://localhost:3000';
 process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test';
 process.env.REDIS_URL = 'redis://localhost:6379';
 process.env.NODE_ENV = 'test';
+process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_123';
+process.env.CLERK_SECRET_KEY = 'sk_test_123';
+process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = 'pk_test_123';
 
 // Mock fetch for tests
 global.fetch = jest.fn();
